@@ -9,6 +9,7 @@ const Body = () => {
   const [listOfRestaurants, setListOfRestraunt] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
+  const [loading, setLoading] = useState(true);
   //  console.log("Body Render");
   useEffect(() =>{
 
@@ -19,16 +20,18 @@ const Body = () => {
     const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING");
       const json = await data.json();
 
-      // console.log(json);
-      setListOfRestraunt(json?.data?.cards[2]?.data?.data?.cards);
-      setFilteredRestaurant(json?.data?.cards[2]?.data?.data?.cards);
+      console.log(json);
+      // console.log("Body fetch");
+      setListOfRestraunt( json?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+      setFilteredRestaurant( json?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+      setLoading(false);
   }
     // conditional Rendering
   // if(listOfRestaurants.length === 0){
   //   return <Shimmer/>
   // }
 
-  return  listOfRestaurants.length === 0 ? (
+  return  listOfRestaurants === 0 ? (
     <Shimmer />
   ) : (
     <div className="body">
@@ -66,9 +69,10 @@ const Body = () => {
           Top Rated Restaurants
         </button>
       </div>
+    {console.log("body return ")}
       <div className="res-container">
         {filteredRestaurant.map((restaurant) => (
-       <Link to={"/restaurants/" + restaurant.data.id} key={restaurant.data.id}> <RestaurantCard  resData={restaurant} /></Link>
+       <Link  to={"/restaurants/" + restaurant?.info.id}  key={restaurant?.info.id}>  <RestaurantCard resData={restaurant?.info} /></Link>
         ))}
       </div>
     </div>
