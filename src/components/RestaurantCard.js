@@ -8,9 +8,10 @@ const RestaurantCard = (props)=>{
          avgRating,
         cuisines,
         costForTwo, 
-        deliveryTime} = resData?.data;
+        deliveryTime} = resData;
     return(
         <div className='res-card'>
+        {console.log("res card ")}
             <img 
             className='res-logo'
             src={"https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_508,h_320,c_fill/" + cloudinaryImageId } alt='Biryani'/>
