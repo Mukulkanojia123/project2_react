@@ -1,7 +1,7 @@
 import React from "react";
 
 const RestaurantCard = (props)=>{
-    // console.log(props)
+    console.log(props)
     const {resData} = props;
     const {cloudinaryImageId ,
          name,

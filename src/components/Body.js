@@ -1,9 +1,10 @@
 import RestaurantCard , {withPromotedLabel} from "./RestaurantCard";
-import { useState, useEffect } from "react";
+import { useState, useEffect , useContext} from "react";
 // import resList from "../utils/mockData";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 const Body = () => {
   // Local State Variable - Super powerful variable
@@ -11,7 +12,7 @@ const Body = () => {
   const [searchText, setSearchText] = useState("");
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
   // const [loading, setLoading] = useState(true);
-   console.log("Body Render" , listOfRestaurants);
+  //  console.log("Body Render" , listOfRestaurants);
 
   const RestaurantCardPromoted = withPromotedLabel(RestaurantCard);
   useEffect(() => {
@@ -23,7 +24,7 @@ const Body = () => {
     const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING");
     const json = await data.json();
 
-    // console.log(json);
+    console.log(json);
     // console.log("Body fetch");
     setListOfRestraunt(json?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
     setFilteredRestaurant(json?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
@@ -33,6 +34,7 @@ const Body = () => {
   // if(listOfRestaurants.length === 0){
   //   return <Shimmer/>
   // }
+  const { loggedInUser, setUserName } = useContext(UserContext);
   const onlineStatus = useOnlineStatus();
   if (onlineStatus === false)
     return (
@@ -44,6 +46,7 @@ const Body = () => {
     <Shimmer />
   ) : (
     <div className="body">
+      
       <div className="filter flex">
         <div className="search m-4 p-4 ">
           <input type="text"
@@ -80,10 +83,14 @@ const Body = () => {
           Top Rated Restaurants
         </button>
         </div>
+        <div className="m-4 p-4 flex items-center">
+          <label>User Name: </label>
+       <input className="border border-blue-600 p-2" value = {loggedInUser} onChange={(e) =>setUserName(e.target.value)}/>
+        </div>
       </div>
 
       <div className="flex flex-wrap justify-center">
-        {filteredRestaurant.map((restaurant) => (
+        {filteredRestaurant && filteredRestaurant.map((restaurant) => (
           <Link to={"/restaurants/" + restaurant?.info.id} key={restaurant?.info.id}> 
            {restaurant?.info.isOpen ? (
               <RestaurantCardPromoted resData={restaurant?.info} />
@@ -92,7 +99,9 @@ const Body = () => {
             )}
           
            </Link>
+           
         ))}
+        
       </div>
     </div>
   );

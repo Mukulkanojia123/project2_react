@@ -9,6 +9,7 @@ import Body from './components/Body';
 import RestaurantMenu from './components/RestaurantMenu';
 import reportWebVitals from './reportWebVitals';
 import Contact from './components/Contact';
+import Cart from './components/Cart';
 // import Grocery from './components/Grocery';
 // Chunking
 // Code Splitting
@@ -44,6 +45,10 @@ const appRouter = createBrowserRouter([
       {
         path : "/restaurants/:resId",
         element : <RestaurantMenu />
+      },
+      {
+        path :"/cart",
+        element : <Cart/>
       }
      ],
      errorElement:<Error/>,
